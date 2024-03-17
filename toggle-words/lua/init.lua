@@ -1,7 +1,6 @@
 local config = {
   words_to_replace = {},
 }
-print('here')
 
 local function run()
   -- save current cursor position
