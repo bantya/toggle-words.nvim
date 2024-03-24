@@ -63,13 +63,23 @@ local function run()
   end
 
   -- replace occurrences of the old word with the new word
-  local new_line = line:gsub(current_word, new_word)
+  local new_line = line:sub(1, start_pos[2] - 1) .. new_word .. line:sub(end_pos[2] + 1)
 
   -- update the buffer with the modified line
   vim.api.nvim_buf_set_lines(bufnr, row - 1, row, false, {new_line})
 
+  local diff = current_word:len() - new_word:len()
+
+  if diff < 0 and start_pos[2] + new_word:len() < col then
+    diff = 0
+  end
+
+  if col - diff < 0 then
+    diff = 0
+  end
+
   -- restore cursor position
-  vim.api.nvim_win_set_cursor(0, cursor)
+  vim.api.nvim_win_set_cursor(0, { row, col - diff })
 end
 
 local function setup(user_config)
@@ -80,4 +90,3 @@ return {
   run = run,
   setup = setup
 }
-
