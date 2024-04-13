@@ -2,6 +2,11 @@ local config = {
   words_to_replace = {},
 }
 
+-- 5.1 compatibility
+if not table.unpack then
+  table.unpack = unpack
+end
+
 local function get_word_from_range(bufnr, start, finish)
   -- get the lines within the specified range
   local lines = vim.api.nvim_buf_get_lines(bufnr, start[1] - 1, finish[1], false)
